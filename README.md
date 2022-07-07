@@ -14,7 +14,7 @@ A functioning e-commerce REST API using Express, Node.js, and Postgres:
 
 ### API Documentation:
 
-- Swagger:
+- Swagger: `http://localhost:3001/`
 
 ### Technologies used:
 
