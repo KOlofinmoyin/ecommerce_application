@@ -15,6 +15,8 @@ app.get("/", (request, response) => {
 
 app.get("/accounts", db.getUsers);
 
+app.post("/register", db.createUser);
+
 app.listen(port, () => {
   console.log(`Amazoon ecommerce App. listening on ${port}.`);
 });
