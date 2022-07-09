@@ -26,6 +26,8 @@ app.put("/accounts/:id", db.updateUser);
 app.delete("/accounts/:id", db.deleteUser);
 
 // PRODUCTS endpoints
+app.get("/products", db.getProducts);
+
 app.get("/products/:id", db.getProductById);
 
 app.listen(port, () => {

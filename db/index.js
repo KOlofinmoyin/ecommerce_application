@@ -7,6 +7,7 @@ const pool = new Pool({
   port: 5432,
 });
 
+// ACCOUNTS db operations:
 const getUsers = (request, response) => {
   pool.query("SELECT * FROM accounts ORDER BY id ASC", (error, results) => {
     if (error) {
@@ -73,6 +74,16 @@ const deleteUser = (request, response) => {
   });
 };
 
+// PRODUCTS db operations:
+const getProducts = (request, response) => {
+  pool.query("SELECT * FROM products ORDER BY id ASC", (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
+  });
+};
+
 const getProductById = (request, response) => {
   const id = parseInt(request.params.id);
 
@@ -90,5 +101,6 @@ module.exports = {
   updateUser,
   getUserById,
   deleteUser,
+  getProducts,
   getProductById,
 };
