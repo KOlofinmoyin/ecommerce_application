@@ -28,6 +28,8 @@ app.delete("/accounts/:id", db.deleteUser);
 // PRODUCTS endpoints
 app.get("/products", db.getProducts);
 
+app.get("/products?category={categoryId}", db.getProductByCategoryQuery);
+
 app.get("/products/:id", db.getProductById);
 
 app.listen(port, () => {

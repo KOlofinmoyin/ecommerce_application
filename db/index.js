@@ -95,6 +95,22 @@ const getProductById = (request, response) => {
   });
 };
 
+const getProductByCategoryQuery = (request, response) => {
+  // const id = parseInt(request.params.id);
+  // pool.query("SELECT * FROM products WHERE id = $1", [id]
+  const query = request.query.q || "";
+  pool.query(
+    "SELECT * FROM products WHERE category LIKE $1",
+    [query],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
+    }
+  );
+};
+
 module.exports = {
   getUsers,
   createUser,
@@ -103,4 +119,5 @@ module.exports = {
   deleteUser,
   getProducts,
   getProductById,
+  getProductByCategoryQuery,
 };
