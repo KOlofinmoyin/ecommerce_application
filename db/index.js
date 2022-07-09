@@ -34,7 +34,11 @@ const createUser = (request, response) => {
   );
 };
 
+<<<<<<< HEAD
 const updateUser = (request, response) => {
+=======
+const updateAccount = (request, response) => {
+>>>>>>> bd29c82604fa62ed184ddf96477ea95243f7f5c5
   const id = parseInt(request.params.id);
   const { first_name, last_name, phone, email, address, password } =
     request.body;
@@ -51,6 +55,7 @@ const updateUser = (request, response) => {
   );
 };
 
+<<<<<<< HEAD
 const getUserById = (request, response) => {
   const id = parseInt(request.params.id);
 
@@ -67,4 +72,10 @@ module.exports = {
   createUser,
   updateUser,
   getUserById,
+=======
+module.exports = {
+  getUsers,
+  createUser,
+  updateAccount,
+>>>>>>> bd29c82604fa62ed184ddf96477ea95243f7f5c5
 };
