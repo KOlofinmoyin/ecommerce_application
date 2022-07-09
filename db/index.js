@@ -34,11 +34,7 @@ const createUser = (request, response) => {
   );
 };
 
-<<<<<<< HEAD
 const updateUser = (request, response) => {
-=======
-const updateAccount = (request, response) => {
->>>>>>> bd29c82604fa62ed184ddf96477ea95243f7f5c5
   const id = parseInt(request.params.id);
   const { first_name, last_name, phone, email, address, password } =
     request.body;
@@ -55,7 +51,6 @@ const updateAccount = (request, response) => {
   );
 };
 
-<<<<<<< HEAD
 const getUserById = (request, response) => {
   const id = parseInt(request.params.id);
 
@@ -67,15 +62,21 @@ const getUserById = (request, response) => {
   });
 };
 
+const deleteUser = (request, response) => {
+  const id = parseInt(request.params.id);
+
+  pool.query("DELETE FROM accounts WHERE id = $1", [id], (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).send(`User deleted with ID: ${id}`);
+  });
+};
+
 module.exports = {
   getUsers,
   createUser,
   updateUser,
   getUserById,
-=======
-module.exports = {
-  getUsers,
-  createUser,
-  updateAccount,
->>>>>>> bd29c82604fa62ed184ddf96477ea95243f7f5c5
+  deleteUser,
 };

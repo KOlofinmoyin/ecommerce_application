@@ -21,6 +21,8 @@ app.post("/register", db.createUser);
 
 app.put("/accounts/:id", db.updateUser);
 
+app.delete("/accounts/:id", db.deleteUser);
+
 app.listen(port, () => {
   console.log(`Amazoon ecommerce App. listening on ${port}.`);
 });
