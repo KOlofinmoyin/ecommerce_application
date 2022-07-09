@@ -34,7 +34,25 @@ const createUser = (request, response) => {
   );
 };
 
+const updateAccount = (request, response) => {
+  const id = parseInt(request.params.id);
+  const { first_name, last_name, phone, email, address, password } =
+    request.body;
+
+  pool.query(
+    "UPDATE accounts SET first_name = $1, last_name = $2, phone = $3, email = $4, address = $5, password = $6 WHERE id = $7",
+    [first_name, last_name, phone, email, address, password, id],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).send(`User-account modified with ID: ${id}`);
+    }
+  );
+};
+
 module.exports = {
   getUsers,
   createUser,
+  updateAccount,
 };
