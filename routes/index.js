@@ -13,6 +13,8 @@ app.get("/", (request, response) => {
   response.send("Welcome to the e-commerce REST (API)");
 });
 
+// ACCOUNTS/USERS enndpoints:
+
 app.get("/accounts", db.getUsers);
 
 app.get("/accounts/:id", db.getUserById);
@@ -22,6 +24,9 @@ app.post("/register", db.createUser);
 app.put("/accounts/:id", db.updateUser);
 
 app.delete("/accounts/:id", db.deleteUser);
+
+// PRODUCTS endpoints
+app.get("/products/:id", db.getProductById);
 
 app.listen(port, () => {
   console.log(`Amazoon ecommerce App. listening on ${port}.`);
