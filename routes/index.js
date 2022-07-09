@@ -32,6 +32,10 @@ app.get("/products?category={categoryId}", db.getProductByCategoryQuery);
 
 app.get("/products/:id", db.getProductById);
 
+// CARTS endpoints:
+app.post("/cart", db.createCart);
+
+// Start app. listening on PORT
 app.listen(port, () => {
   console.log(`Amazoon ecommerce App. listening on ${port}.`);
 });

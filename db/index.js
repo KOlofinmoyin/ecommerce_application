@@ -111,6 +111,21 @@ const getProductByCategoryQuery = (request, response) => {
   );
 };
 
+// CARTs db operations:
+const createCart = (request, response) => {
+  const { discount, fulfilled, bill_date } = request.body;
+
+  pool.query("INSERT INTO carts (discount,fulfilled,bill_date) VALUES ($1, $2, $3) RETURNING *",
+    [discount, fulfilled, bill_date],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(201).send(`Cart added with ID: ${results.rows[0].id}`);
+    }
+  );
+};
+
 module.exports = {
   getUsers,
   createUser,
@@ -120,4 +135,5 @@ module.exports = {
   getProducts,
   getProductById,
   getProductByCategoryQuery,
+  createCart,
 };
