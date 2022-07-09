@@ -15,6 +15,8 @@ app.get("/", (request, response) => {
 
 app.get("/accounts", db.getUsers);
 
+app.get("/accounts/:id", db.getUserById);
+
 app.post("/register", db.createUser);
 
 app.put("/accounts/:id", db.updateUser);
