@@ -4,6 +4,10 @@ const { request } = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
 const db = require("../db/index");
+const morgan = require("morgan");
+
+// Logging Middleware
+app.use(morgan("tiny"));
 
 app.use(bodyParser.json());
 
@@ -26,9 +30,9 @@ app.put("/accounts/:id", db.updateUser);
 app.delete("/accounts/:id", db.deleteUser);
 
 // PRODUCTS endpoints
-app.get("/products", db.getProducts);
+app.get("/products?category_id", db.getProductByCategoryQuery);
 
-app.get("/products?category={categoryId}", db.getProductByCategoryQuery);
+app.get("/products", db.getProducts);
 
 app.get("/products/:id", db.getProductById);
 
