@@ -115,7 +115,8 @@ const getProductByCategoryQuery = (request, response) => {
 const createCart = (request, response) => {
   const { discount, fulfilled, bill_date } = request.body;
 
-  pool.query("INSERT INTO carts (discount,fulfilled,bill_date) VALUES ($1, $2, $3) RETURNING *",
+  pool.query(
+    "INSERT INTO carts (discount,fulfilled,bill_date) VALUES ($1, $2, $3) RETURNING *",
     [discount, fulfilled, bill_date],
     (error, results) => {
       if (error) {
@@ -124,6 +125,17 @@ const createCart = (request, response) => {
       response.status(201).send(`Cart added with ID: ${results.rows[0].id}`);
     }
   );
+};
+
+const getCartById = (request, response) => {
+  const id = parseInt(request.params.id);
+
+  pool.query("SELECT * FROM carts WHERE id = $1", [id], (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
+  });
 };
 
 module.exports = {
@@ -136,4 +148,5 @@ module.exports = {
   getProductById,
   getProductByCategoryQuery,
   createCart,
+  getCartById,
 };
