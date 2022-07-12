@@ -5,6 +5,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const db = require("../db/index");
 const morgan = require("morgan");
+const session = require("express-session");
 
 // Logging Middleware
 app.use(morgan("tiny"));
