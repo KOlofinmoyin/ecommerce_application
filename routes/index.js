@@ -6,6 +6,8 @@ const port = process.env.PORT || 3000;
 const db = require("../db/index");
 const morgan = require("morgan");
 const session = require("express-session");
+const passport = require("passport");
+const localStrategy = require("passport-local").Strategy;
 
 // Logging Middleware
 app.use(morgan("tiny"));
@@ -13,6 +15,8 @@ app.use(morgan("tiny"));
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(passport.initialize());
 
 app.get("/", (request, response) => {
   response.send("Welcome to the e-commerce REST (API)");
