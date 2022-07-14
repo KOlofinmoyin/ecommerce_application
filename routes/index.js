@@ -7,7 +7,7 @@ const db = require("../db/index");
 const morgan = require("morgan");
 const session = require("express-session");
 const passport = require("passport");
-const localStrategy = require("passport-local").Strategy;
+const LocalStrategy = require("passport-local").Strategy;
 const session = require("express-session");
 const store = new session.MemoryStore();
 
@@ -33,6 +33,37 @@ app.use(
     store,
   })
 );
+
+// Add your passport local strategy below:
+passport.use(
+  new LocalStrategy(function (username, password, done) {
+    db.findByUsername(username, (err, user) => {
+      if (err) {
+        return done(err);
+      }
+      if (!user) {
+        return done(null, false);
+      }
+      if (user.password != password) {
+        return done(null, false);
+      }
+      return done(null, user);
+    });
+  })
+);
+app.post("/login", (req, res) => {
+  if (password == "codec@demy10") {
+    // Attach an `authenticated` property to our session:
+    req.session.authenticated = true;
+    // Attach a user object to our session:
+    req.session.user = {
+      username,
+      password,
+    };
+  } else {
+    res.send("Who dares disturb my slumber? ;<");
+  }
+});
 
 app.get("/", (request, response) => {
   response.send("Welcome to the e-commerce REST (API)");
