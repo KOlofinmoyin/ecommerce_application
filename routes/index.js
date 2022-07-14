@@ -8,6 +8,8 @@ const morgan = require("morgan");
 const session = require("express-session");
 const passport = require("passport");
 const localStrategy = require("passport-local").Strategy;
+const session = require("express-session");
+const store = new session.MemoryStore();
 
 // Logging Middleware
 app.use(morgan("tiny"));
@@ -16,7 +18,21 @@ app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Create passport middleware
 app.use(passport.initialize());
+
+app.use(passport.session());
+
+// Create session middleware below:
+app.use(
+  session({
+    secret: process.env.kalubi,
+    cookie: { maxAge: 172800000, secure: true, sameSite: "none" },
+    resave: false,
+    saveUninitialized: false,
+    store,
+  })
+);
 
 app.get("/", (request, response) => {
   response.send("Welcome to the e-commerce REST (API)");
