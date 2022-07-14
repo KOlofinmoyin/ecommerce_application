@@ -64,7 +64,20 @@ const getUserById = (request, response) => {
 };
 
 // TO-DO: Task INCOMPLETE
-const findByUsername = (request, response, callback) => {};
+const findByUserEmail = (request, response) => {
+  const email = request.body.email;
+
+  pool.query(
+    "SELECT email FROM accounts WHERE email = $1",
+    [email],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
+    }
+  );
+};
 
 const deleteUser = (request, response) => {
   const id = parseInt(request.params.id);
@@ -79,6 +92,7 @@ const deleteUser = (request, response) => {
 
 // PRODUCTS db operations:
 const getProducts = (request, response) => {
+  console.log("Error Congolese Musician.");
   pool.query("SELECT * FROM products ORDER BY id ASC", (error, results) => {
     if (error) {
       throw error;
@@ -98,10 +112,7 @@ const getProductById = (request, response) => {
   });
 };
 
-// TO-DO: Task INCOMPLETE: BUG - 'the api seems to return products from EVERY category instead of just the specified category.'
 const getProductByCategoryQuery = (request, response) => {
-  // const id = parseInt(request.params.id);
-  // pool.query("SELECT * FROM products WHERE id = $1", [id]
   const query = request.query.category_id;
   pool.query(
     "SELECT * FROM products WHERE category_id = $1",
@@ -154,4 +165,5 @@ module.exports = {
   getProductByCategoryQuery,
   createCart,
   getCartById,
+  findByUserEmail,
 };

@@ -54,7 +54,7 @@ passport.use(
   })
 );
 
-app.post("/login", db.findByUsername);
+app.post("/login", db.findByUserEmail);
 
 // app.post("/login", (req, res) => {
 //   if (password == "codec@demy10") {
