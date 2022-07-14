@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const { request } = require("express");
+// const { request, response } = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
 const db = require("../db/index");
@@ -8,7 +8,6 @@ const morgan = require("morgan");
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const session = require("express-session");
 const store = new session.MemoryStore();
 
 // Logging Middleware
@@ -18,15 +17,13 @@ app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Create passport middleware
-app.use(passport.initialize());
-
-app.use(passport.session());
-
 // Create session middleware below:
+console.log(process.env.kalubi);
+
 app.use(
   session({
-    secret: process.env.kalubi,
+    // secret: process.env.kalubi,
+    secret: "Lor3mIp5um",
     cookie: { maxAge: 172800000, secure: true, sameSite: "none" },
     resave: false,
     saveUninitialized: false,
@@ -34,10 +31,15 @@ app.use(
   })
 );
 
+// Create passport middleware
+app.use(passport.initialize());
+
+app.use(passport.session());
+
 // Add your passport local strategy below:
 passport.use(
-  new LocalStrategy(function (username, password, done) {
-    db.findByUsername(username, (err, user) => {
+  new LocalStrategy(function (email, password, done) {
+    db.findByUsername(email, (err, user) => {
       if (err) {
         return done(err);
       }
@@ -51,19 +53,22 @@ passport.use(
     });
   })
 );
-app.post("/login", (req, res) => {
-  if (password == "codec@demy10") {
-    // Attach an `authenticated` property to our session:
-    req.session.authenticated = true;
-    // Attach a user object to our session:
-    req.session.user = {
-      username,
-      password,
-    };
-  } else {
-    res.send("Who dares disturb my slumber? ;<");
-  }
-});
+
+app.post("/login", db.findByUsername);
+
+// app.post("/login", (req, res) => {
+//   if (password == "codec@demy10") {
+//     // Attach an `authenticated` property to our session:
+//     req.session.authenticated = true;
+//     // Attach a user object to our session:
+//     req.session.user = {
+//       username,
+//       password,
+//     };
+//   } else {
+//     res.send("Who dares disturb my slumber? ;<");
+//   }
+// });
 
 app.get("/", (request, response) => {
   response.send("Welcome to the e-commerce REST (API)");
@@ -82,7 +87,7 @@ app.put("/accounts/:id", db.updateUser);
 app.delete("/accounts/:id", db.deleteUser);
 
 // PRODUCTS endpoints
-app.get("/products?category_id", db.getProductByCategoryQuery);
+app.get("/products/find", db.getProductByCategoryQuery);
 
 app.get("/products", db.getProducts);
 
