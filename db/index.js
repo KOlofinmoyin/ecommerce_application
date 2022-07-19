@@ -65,7 +65,7 @@ const getUserById = (request, response) => {
 
 // TO-DO: Task INCOMPLETE
 const findByUserEmail = (request, response) => {
-  const email = request.body.email;
+  const { email } = request.body.user;
 
   pool.query(
     "SELECT email FROM accounts WHERE email = $1",
