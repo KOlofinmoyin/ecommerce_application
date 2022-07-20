@@ -90,7 +90,6 @@ const deleteUser = (request, response) => {
 
 // PRODUCTS db operations:
 const getProducts = (request, response) => {
-  console.log("Error Congolese Musician.");
   pool.query("SELECT * FROM products ORDER BY id ASC", (error, results) => {
     if (error) {
       throw error;

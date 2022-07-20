@@ -104,17 +104,18 @@ app.get("/login", (req, res) => {
   res.send("Login page");
 });
 
-app.post("/login", (req, res) => {
+app.post(
+  "/login",
   passport.authenticate("local", { failureRedirect: "/login" }),
-    (req, res) => {
-      res.redirect("/");
-    };
-});
+  (req, res) => {
+    res.redirect("/");
+  }
+);
 
 // Redirect route used in 2ND - SECOND incarnation of login authentication - DOESN'T WORK:
 // app.get("/", ensureAuthentication, (request, response) => {}
-app.get("/", (request, response) => {
-  response.send("Welcome to the e-commerce REST (API)");
+app.get("/", (req, res) => {
+  res.send("Welcome to the e-commerce REST (API)");
 });
 
 app.get("/logout", (req, res) => {
