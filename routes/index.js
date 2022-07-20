@@ -99,11 +99,11 @@ function ensureAuthentication(req, res, next) {
 //   }
 // });
 
-// 3RD - THIRD incarnation of login authentication:
 app.get("/login", (req, res) => {
   res.send("Login page");
 });
 
+// 3RD - THIRD incarnation of login authentication:
 app.post(
   "/login",
   passport.authenticate("local", { failureRedirect: "/login" }),
