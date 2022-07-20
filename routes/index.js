@@ -17,9 +17,7 @@ app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Create session middleware below:
-console.log(process.env.kalubi);
-
+//Session middleware created below:
 app.use(
   session({
     // secret: process.env.kalubi,
@@ -36,42 +34,92 @@ app.use(passport.initialize());
 
 app.use(passport.session());
 
-// Add your passport local strategy below:
+// Complete the serializeUser function below:
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+// Complete the deserializeUser function below:
+passport.deserializeUser((id, done) => {
+  db.findById("SELECT * FROM accounts WHERE id = $1", [id], (err, user) => {
+    if (err) return done(err);
+    done(null, user);
+  });
+});
+
+// Passport local strategy:
 passport.use(
-  new LocalStrategy(function (email, password, done) {
-    db.findByUsername(email, (err, user) => {
-      if (err) {
-        return done(err);
+  new LocalStrategy(function (email, password, cb) {
+    db.findByUserEmail(
+      "SELECT * FROM accounts WHERE email = $1",
+      [email],
+      (err, user) => {
+        if (err) {
+          return cb(err);
+        }
+        if (!user) {
+          return cb(null, false);
+        }
+        if (user.password != password) {
+          return cb(null, false);
+        }
+        return cb(null, user);
       }
-      if (!user) {
-        return done(null, false);
-      }
-      if (user.password != password) {
-        return done(null, false);
-      }
-      return done(null, user);
-    });
+    );
   })
 );
 
-app.post("/login", db.findByUserEmail);
+// Helper function used in 2ND - SECOND incarnation of login authentication - DOESN'T WORK:
+function ensureAuthentication(req, res, next) {
+  // Complete the if statmenet below:
+  if (req.session.authenticated) {
+    return next();
+  } else {
+    res.status(403).json({ msg: "You're not authorized to view this page" });
+  }
+}
 
+// 1ST - FIRST incarnation of login authentication:
+// app.post("/login", db.findByUserEmail);
+
+// 2ND - SECOND incarnation of login authentication:
 // app.post("/login", (req, res) => {
+//   const { email, password } = req.body.user;
 //   if (password == "codec@demy10") {
 //     // Attach an `authenticated` property to our session:
 //     req.session.authenticated = true;
 //     // Attach a user object to our session:
 //     req.session.user = {
-//       username,
+//       email,
 //       password,
 //     };
+//     res.redirect("/");
 //   } else {
 //     res.send("Who dares disturb my slumber? ;<");
 //   }
 // });
 
+// 3RD - THIRD incarnation of login authentication:
+app.get("/login", (req, res) => {
+  res.send("Login page");
+});
+
+app.post("/login", (req, res) => {
+  passport.authenticate("local", { failureRedirect: "/login" }),
+    (req, res) => {
+      res.redirect("/");
+    };
+});
+
+// Redirect route used in 2ND - SECOND incarnation of login authentication - DOESN'T WORK:
+// app.get("/", ensureAuthentication, (request, response) => {}
 app.get("/", (request, response) => {
   response.send("Welcome to the e-commerce REST (API)");
+});
+
+app.get("/logout", (req, res) => {
+  req.logout();
+  res.redirect("/");
 });
 
 // ACCOUNTS/USERS enndpoints:

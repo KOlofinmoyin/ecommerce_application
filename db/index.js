@@ -64,20 +64,18 @@ const getUserById = (request, response) => {
 };
 
 // TO-DO: Task INCOMPLETE
-const findByUserEmail = (request, response) => {
-  const { email } = request.body.user;
+// const findByUserEmail = (email, cb) => {
 
-  pool.query(
-    "SELECT email FROM accounts WHERE email = $1",
-    [email],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      response.status(200).json(results.rows);
-    }
-  );
-};
+//   pool.query(
+//     "SELECT password FROM accounts WHERE email = $1",
+//     [email],
+//     (error, user) => {
+//         if (error) { return cb(error); }
+//         if (!user) { return cb(null, false, { message: 'Incorrect username or password.' }); }
+//     }
+
+//   );
+// };
 
 const deleteUser = (request, response) => {
   const id = parseInt(request.params.id);
@@ -165,5 +163,10 @@ module.exports = {
   getProductByCategoryQuery,
   createCart,
   getCartById,
-  findByUserEmail,
+  findByUserEmail: (text, params, callback) => {
+    return pool.query(text, params, callback);
+  },
+  findById: (text, params, callback) => {
+    return pool.query(text, params, callback);
+  },
 };
