@@ -63,7 +63,6 @@ const getUserById = (request, response) => {
   });
 };
 
-
 const deleteUser = (request, response) => {
   const id = parseInt(request.params.id);
 
@@ -72,6 +71,27 @@ const deleteUser = (request, response) => {
       throw error;
     }
     response.status(200).send(`User deleted with ID: ${id}`);
+  });
+};
+
+// ORDERS db operations:
+const getOrders = (request, response) => {
+  pool.query("SELECT * FROM orders ORDER BY id ASC", (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
+  });
+};
+
+const getOrderById = (request, response) => {
+  const id = parseInt(request.params.id);
+
+  pool.query("SELECT * FROM orders WHERE id = $1", [id], (error, results) => {
+    if (error) {
+      throw error;
+    }
+    response.status(200).json(results.rows);
   });
 };
 
@@ -144,6 +164,8 @@ module.exports = {
   updateUser,
   getUserById,
   deleteUser,
+  getOrders,
+  getOrderById,
   getProducts,
   getProductById,
   getProductByCategoryQuery,
