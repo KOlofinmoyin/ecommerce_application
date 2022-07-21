@@ -63,19 +63,6 @@ const getUserById = (request, response) => {
   });
 };
 
-// TO-DO: Task INCOMPLETE
-// const findByUserEmail = (email, cb) => {
-
-//   pool.query(
-//     "SELECT password FROM accounts WHERE email = $1",
-//     [email],
-//     (error, user) => {
-//         if (error) { return cb(error); }
-//         if (!user) { return cb(null, false, { message: 'Incorrect username or password.' }); }
-//     }
-
-//   );
-// };
 
 const deleteUser = (request, response) => {
   const id = parseInt(request.params.id);
