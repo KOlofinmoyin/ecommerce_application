@@ -16,6 +16,8 @@ app.use(morgan("tiny"));
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 //Session middleware created below:
 app.use(
@@ -53,13 +55,15 @@ passport.use(
     db.findByUserEmail(
       "SELECT * FROM accounts WHERE email = $1",
       [email],
-      (err, user) => {
+      (err, result) => {
         if (err) {
           return cb(err);
         }
-        if (!user) {
+        if (!result && result.rows.length != 1) {
           return cb(null, false);
         }
+        const user = result.rows[0];
+
         if (user.password != password) {
           return cb(null, false);
         }
@@ -83,38 +87,38 @@ function ensureAuthentication(req, res, next) {
 // app.post("/login", db.findByUserEmail);
 
 // 2ND - SECOND incarnation of login authentication:
-// app.post("/login", (req, res) => {
-//   const { email, password } = req.body.user;
-//   if (password == "codec@demy10") {
-//     // Attach an `authenticated` property to our session:
-//     req.session.authenticated = true;
-//     // Attach a user object to our session:
-//     req.session.user = {
-//       email,
-//       password,
-//     };
-//     res.redirect("/");
-//   } else {
-//     res.send("Who dares disturb my slumber? ;<");
-//   }
-// });
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+  if (password == "codec@demy10") {
+    // Attach an `authenticated` property to our session:
+    req.session.authenticated = true;
+    // Attach a user object to our session:
+    req.session.user = {
+      email,
+      password,
+    };
+    res.redirect("/");
+  } else {
+    res.send("Who dares disturb my slumber? ;<");
+  }
+});
 
 app.get("/login", (req, res) => {
   res.send("Login page");
 });
 
 // 3RD - THIRD incarnation of login authentication:
-app.post(
-  "/login",
-  passport.authenticate("local", { failureRedirect: "/login" }),
-  (req, res) => {
-    res.redirect("/");
-  }
-);
+// app.post(
+//   "/login",
+//   passport.authenticate("local", { failureRedirect: "/login" }),
+//   (req, res) => {
+//     res.redirect("/");
+//   }
+// );
 
 // Redirect route used in 2ND - SECOND incarnation of login authentication - DOESN'T WORK:
-// app.get("/", ensureAuthentication, (request, response) => {}
-app.get("/", (req, res) => {
+app.get("/", ensureAuthentication, (request, response) => {
+// app.get("/", (req, res) => {
   res.send("Welcome to the e-commerce REST (API)");
 });
 
