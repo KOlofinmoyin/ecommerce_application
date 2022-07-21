@@ -101,8 +101,13 @@ app.put("/accounts/:id", db.updateUser);
 
 app.delete("/accounts/:id", db.deleteUser);
 
+// ORDERS endpoints
+app.get("/orders", db.getOrders);
+
+app.get("/orders/:id", db.getOrderById);
+
 // PRODUCTS endpoints
-app.get("/products/find", db.getProductByCategoryQuery);
+app.get("/orders/find", db.getProductByCategoryQuery);
 
 app.get("/products", db.getProducts);
 
